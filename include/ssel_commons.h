@@ -19,6 +19,7 @@ enum ExprElementType {
 	CONSTANT,
 	STRING,
 	VARIABLE,
+	COLOR,
 	LEFT_BRACE,
 	RIGHT_BRACE,
 	OP_AT, 
@@ -33,7 +34,8 @@ typedef vector<struct ExprElement> Expression;
 
 struct LessElement;
 struct ExprElement;
-struct Constant;
+struct LessConstant;
+struct LessColor;
 struct LessDef;
 struct Param;
 struct LessSelector;
@@ -50,7 +52,7 @@ struct ExprElement {
         void *data;
 };
 
-struct Constant {
+struct LessConstant {
 	double val;
 	string unit;
 };
@@ -64,6 +66,12 @@ struct Param {
 	string name;
 	Expression expression;
 };
+
+struct LessColor {
+	int r;
+	int g;
+	int b;
+}
 
 struct LessSelector {
 	string	name;
