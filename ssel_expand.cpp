@@ -2,7 +2,8 @@
 
 #include <map>
 #include <pair>
-typedef map<string,pair<LessElementType,void *>> TokenMap;
+//In order to allow same names in seletor and functional mixin.
+typedef map<pair<string,LessElementType>,void *> TokenMap;
 typedef *PDef LessDef;
 typedef *PSelector LessSelector;
 typedef *PMixin LessMixin;
@@ -56,22 +57,31 @@ void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
 }
 LessBlock expand_mixin(PMixin mixin)
 {
+    //TODO
+    //Use a parallel set list to determine whether a name is in the token list.
+    //Will improve the performance .
     if(mixin->params.empty())
         for(auto iter=G_tokenList.rbegin();iter!=G_tokenList.rend();++iter){
             for(auto iter2=(*iter1).rbegin();iter2!=(*iter1).rend();++iter2){
-                if(iter2->find(mixin->name)!=map::end&&(iter2->at(mixin->name).first==LessElementType::PARAMETRIC_SELECTOR
-                        ||iter2->at(mixin->name==LessElementType::NORMAL_SELECTOR)){
-                        if(iter2->at(mixin->name==LessElementType::NORMAL_SELECTOR){
-                            //TODO:
-                            //Call skyegg calc before returning
-                            return (LessSelector(iter2->at(mixin->name)->second))->selector_body;
+                if(iter2->find(make_pair(mixin->name,LessElementType::NORMAL_SELECTOR))!=map::end||
+                   iter2->find(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR))!=map::end){
+                    if(iter2->at(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR)){
+                        for(auto &elem : selector->selector_body){
+                            auto selector = PSelector(
+                            iter2->at(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR)));
+                            auto body=seletor->selector_body;
+                            auto params=seletor->params;
+                            for(auto &elem : params){
+                                LessDef to_ins({elem.name,elem.expression});
+                                body.insert(body.begin(),to_ins);
                             }
-                        else{
-                            auto selector = PSelector(iter2->at(mixin->name)->second);
-                            for(auto &elem : selector->selector_body){
-
-                            }
+                            return body;
                         }
+                        else{
+                            auto body=(LessSelector(iter2->at(make_pair(mixin->name,LessElementType::NORMAL_SELECTOR)))->selector_body;
+                            return body;
+                        }
+                    }
                 }
             }
         }
@@ -81,13 +91,13 @@ LessBlock expand_mixin(PMixin mixin)
 }
 void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap)
 {
-    tokenmap[nselector->name]=make_pair(LessElementType::NORMAL_SELECTOR,nselector);
+    tokenmap[make_pair(nselector->name,LessElementType::NORMAL_SELECTOR)]=nselector;
 }
 void build_parametricselector_token(PSelector paraselector,TokenMap &tokenmap)
 {
-    tokenmap[paraselector->name]=make_pair(LessElementType::PARAMETRIC_SELECTOR, nselector);
+    tokenmap[make_pair(paraselector->name,LessElementType::PARAMETRIC_SELECTOR)]=nselector;
 }
 void build_def_token(PDef def,TokenMap &tokenmap)
 {
-    tokenmap[def->name]=make_pair(LessElementType::DEF,def);
+    tokenmap[make_pair(def->name,LessElementType::DEF]=make_pair(LessElementType::DEF,def);
 }
