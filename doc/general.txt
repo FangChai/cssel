@@ -69,6 +69,7 @@ enum ExprElementType {
 	LEFT_BRACE,
 	RIGHT_BRACE,
 	OP_AT, 
+	OP_NEG,
 	OP_ADD,
 	OP_SUB,
 	OP_MUL,
