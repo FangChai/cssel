@@ -23,6 +23,7 @@ enum ExprElementType {
 	RIGHT_BRACE,
 	OP_AT, 
 	OP_ADD,
+	OP_NEG,
 	OP_SUB,
 	OP_MUL,
 	OP_DIV,
