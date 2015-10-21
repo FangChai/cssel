@@ -37,7 +37,7 @@ struct ExprElement;
 struct LessConstant;
 struct LessColor;
 struct LessDef;
-struct Param;
+struct LessParam;
 struct LessSelector;
 struct LessMixin;
 struct LessCssRule;
@@ -52,7 +52,7 @@ struct ExprElement {
         void *data;
 };
 
-struct LessConstant {
+struct ExprConstant {
 	double val;
 	string unit;
 };
@@ -62,7 +62,7 @@ struct LessDef {
 	Expression expression;
 };
 
-struct Param {
+struct LessParam {
 	string name;
 	Expression expression;
 };
@@ -75,17 +75,18 @@ struct LessColor {
 
 struct LessSelector {
 	string	name;
-	vector<struct Param> params;
+	vector<struct LessParam> params;
 	LessBlock selector_body;
 };
 
 struct LessMixin {
 	string name;
-	vector<Expression> expr;
+	vector<Expression> params;
 };
 
 struct LessCssRule {
 	string name;
 	Expression expression;
 };
+
 #endif
