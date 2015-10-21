@@ -18,7 +18,6 @@ enum LessElementType {
 enum ExprElementType {
 	CONSTANT,
 	STRING,
-	VARIABLE,
 	COLOR,
 	LEFT_BRACE,
 	RIGHT_BRACE,
