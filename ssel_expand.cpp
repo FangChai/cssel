@@ -5,6 +5,7 @@
 typedef map<string,pair<LessElementType,void *>> TokenMap;
 typedef *PDef LessDef;
 typedef *PSelector LessSelector;
+typedef *PMixin LessMixin;
 list<TokenMap> G_tokenList;
 void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
     //To Tang Pro : Specify the second param as true.
@@ -21,9 +22,6 @@ void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
             case LessElementType::BLOCK_COMMENT:
                 break;
             case LessElementType::MIXIN:
-                if(!firstInvoke){
-
-                }
                 break;
             case LessElementType::CSS_RULE:
                 break;
@@ -56,6 +54,7 @@ void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
         }
     }
 }
+void expand_mixin(PMixin mixin,)
 void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap)
 {
     tokenmap[nselector->name]=make_pair(LessElementType::NORMAL_SELECTOR,nselector);
