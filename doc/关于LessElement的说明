@@ -1,0 +1,129 @@
+关于LessElement的type取值及其对应行为
+
+======================================================================
+1.DEF
+======================================================================
+定义: 形如 
+           "@a : 3cm + @@b;" 
+的LessElement
+
+data指向的结构: LessDef
+
+LessDef各个字段解释
+name : "a"
+expression: 储存有 "3cm" "+" "@" "@" "b" 等ExprElement的vector 
+=================================
+关于ExprElement，见后面的补充说明
+
+======================================================================
+2.NORMAL_SELECTOR
+======================================================================
+定义：形如
+            .selector1 {
+		...
+            }
+的LessElement
+
+data指向的结构: LessSelector
+
+LessSelector各个字段解释:
+name : ".selector1"
+params: 一个空表
+selector_body : 一个包含花括号内部所有LessElement的vector
+
+======================================================================
+3.PARAMETRIC_SELECTOR
+======================================================================
+定义: 形如 
+           .selector2(@par1:@p + 2, @par2) {
+                 ...
+           }
+的LessElement
+
+data指向: LessSelecor
+
+各个字段解释:
+name : ".selector2"
+params: 一个存有 "@par1:@p + 2" "@par2" 等LessParm的vector
+selector_body : 一个包含花括号内部所有LessElement的vector
+=================================
+关于LessParam
+定义：形如上文中   括号内   "@par1:@p + 2"的一个代码段
+字段解释：
+name : par1
+expression: 存有 "@" "p" "+" "2" 等ExprElement的一个vector
+
+======================================================================
+4.BLOCK_COMMENT
+======================================================================
+定义:形如
+          /*
+           sfasdl;fjasdlfjsalf;jsadlfjslkdajfkasdj;flk
+          */
+的一个LessElement
+
+data指向： string
+
+string里面存整个注释块
+=================================
+关于单行注释：
+定义：形如
+//dsfasfj;adsfklasjdf;lkajsdfkjsalk;dfjlkadsf
+的东西
+
+请直接忽略
+
+======================================================================
+5.MIXIN
+======================================================================
+定义:形如
+	.selector2(22+34,45);
+的LessElement(参见Less标准中的Mixin相关内容）
+
+data指向: LessMixin
+
+各字段解释:
+name : ".selector2"
+params : 一个有"22+34" "45"两个Expression的vector
+
+======================================================================
+6.CSS_RULE（注意与DEF的区别)
+======================================================================
+定义:形如
+         height:344 + @b + 34cm;
+的LessElement
+
+data指向: LessCssRule
+
+各个字段解释:
+name: "height"
+expression: 一个存有 "334" "@" "b" "34cm" 等 ExprElement的vector
+
+======================================================================
+补充：关于ExprElement
+======================================================================
+对于@ + - * / ( ),type分别为
+	OP_AT, 
+	OP_ADD,
+	OP_SUB,
+	OP_MUL,
+	OP_DIV,
+	LEFT_BRACE,
+	RIGHT_BRACE,
+
+对于constant, 如 34px，则data指向LessConstant
+val:34
+unit:"px"
+
+对于Color，如#ff0203，则data指向LessColor
+r:256
+g:01
+b:03
+
+对于variable，data指向string,string中存名字，如@@b，被分解为
+OP_AT OP_AT "b"
+三个ExprElement
+
+对于string, 被""包围的东西被称为称为string，data指向一个string
+string中直接存入字符串内容
+
