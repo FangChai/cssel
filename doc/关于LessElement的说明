@@ -105,11 +105,12 @@ expression: 一个存有 "334" "@" "b" "34cm" 等 ExprElement的vector
 对于@ + - * / ( ),type分别为
 	OP_AT, 
 	OP_ADD,
-	OP_SUB,
+	OP_SUB或OP_NEG  //减号或负号
 	OP_MUL,
 	OP_DIV,
 	LEFT_BRACE,
 	RIGHT_BRACE,
+（详见关于Operator一节）
 
 对于constant, 如 34px，则data指向LessConstant
 val:34
@@ -124,4 +125,16 @@ b:03
 string中直接存入字符串内容，若有引号，保留引号，如@@b，被分解为
 OP_AT OP_AT b
 三个ExprElement,其中b为string
+======================================================================
+补充：关于Operator
+======================================================================
+单目运算符：OP_AT(@) OP_NEG(-)
+双目运算符：OP_MUL(*) OP_DIV(/) OP_ADD(+) OP_SUB(-)
+运算结合结合性：单目运算符右结合，双目运算符左结合
 
+关于负号，减号，与字符串里面的横杠的区分：
+如果前面为空格或"-"处于字符串开头：
+	如果后面为空格：OP_SUB
+	如果后面为一个只含数字的不可分割串：OP_NEG (eg. -2345是OP_NEG, -224a不是OP_NEG而是横杠)
+如果前面为其它字符:
+	横杠
