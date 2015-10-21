@@ -120,10 +120,8 @@ r:256
 g:01
 b:03
 
-对于variable，data指向string,string中存名字，如@@b，被分解为
-OP_AT OP_AT "b"
-三个ExprElement
-
-对于string, 被""包围的东西被称为称为string，data指向一个string
-string中直接存入字符串内容
+对于string, 任何由连续的数字字母减号下划线组成的单元视为string，表达式中的变量名也视为string, data指向一个string
+string中直接存入字符串内容，若有引号，保留引号，如@@b，被分解为
+OP_AT OP_AT b
+三个ExprElement,其中b为string
 
