@@ -41,7 +41,7 @@ void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
             case LessElementType::DEF:
                 break;
             case LessElementType::MIXIN:
-                expand_mixin()
+                auto block=expand_mixin((PMixin)elem.data);
                 break;
             case LessElementType::BLOCK_COMMENT:
                 break;
@@ -54,7 +54,31 @@ void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
         }
     }
 }
-void expand_mixin(PMixin mixin,)
+LessBlock expand_mixin(PMixin mixin)
+{
+    if(mixin->params.empty())
+        for(auto iter=G_tokenList.rbegin();iter!=G_tokenList.rend();++iter){
+            for(auto iter2=(*iter1).rbegin();iter2!=(*iter1).rend();++iter2){
+                if(iter2->find(mixin->name)!=map::end&&(iter2->at(mixin->name).first==LessElementType::PARAMETRIC_SELECTOR
+                        ||iter2->at(mixin->name==LessElementType::NORMAL_SELECTOR)){
+                        if(iter2->at(mixin->name==LessElementType::NORMAL_SELECTOR){
+                            //TODO:
+                            //Call skyegg calc before returning
+                            return (LessSelector(iter2->at(mixin->name)->second))->selector_body;
+                            }
+                        else{
+                            auto selector = PSelector(iter2->at(mixin->name)->second);
+                            for(auto &elem : selector->selector_body){
+
+                            }
+                        }
+                }
+            }
+        }
+    else{
+
+    }
+}
 void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap)
 {
     tokenmap[nselector->name]=make_pair(LessElementType::NORMAL_SELECTOR,nselector);
