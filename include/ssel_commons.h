@@ -21,7 +21,7 @@ enum ExprElementType {
 	COLOR,
 	LEFT_BRACE,
 	RIGHT_BRACE,
-	OP_AT, 
+	OP_AT,
 	OP_ADD,
 	OP_NEG,
 	OP_SUB,
@@ -29,7 +29,7 @@ enum ExprElementType {
 	OP_DIV,
 };
 
-typedef list<struct LessElement> LessBlock; 
+typedef list<struct LessElement> LessBlock;
 typedef vector<struct ExprElement> Expression;
 
 struct LessElement;
@@ -71,7 +71,7 @@ struct LessColor {
 	int r;
 	int g;
 	int b;
-}
+};
 
 struct LessSelector {
 	string	name;

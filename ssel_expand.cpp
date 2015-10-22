@@ -1,12 +1,12 @@
 #include "./include/ssel_commons.h"
 
 #include <map>
-#include <pair>
+#include <utility>
 //In order to allow same names in seletor and functional mixin.
 typedef map<pair<string,LessElementType>,void *> TokenMap;
-typedef *PDef LessDef;
-typedef *PSelector LessSelector;
-typedef *PMixin LessMixin;
+typedef LessDef *PDef ;
+typedef LessSelector* PSelector ;
+typedef LessMixin *PMixin ;
 list<TokenMap> G_tokenList;
 void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
     //To Tang Pro : Specify the second param as true.
