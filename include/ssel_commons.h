@@ -1,5 +1,6 @@
 #ifndef SSEL_COMMONS_H
 #define SSEL_COMMONS_H
+
 #include <list>
 #include <vector>
 #include <string>
@@ -21,16 +22,13 @@ enum ExprElementType {
 	COLOR,
 	LEFT_BRACE,
 	RIGHT_BRACE,
-	OP_AT, 
+	OP_AT,
 	OP_ADD,
 	OP_NEG,
 	OP_SUB,
 	OP_MUL,
 	OP_DIV,
 };
-
-typedef list<struct LessElement> LessBlock; 
-typedef vector<struct ExprElement> Expression;
 
 struct LessElement;
 struct ExprElement;
@@ -42,6 +40,9 @@ struct LessSelector;
 struct LessMixin;
 struct LessCssRule;
 
+typedef list<struct LessElement> LessBlock;
+typedef vector<struct ExprElement> Expression;
+
 struct LessElement{
 	LessElementType type;
         void *data;
@@ -52,9 +53,10 @@ struct ExprElement {
         void *data;
 };
 
-struct ExprConstant {
-	double val;
-	string unit;
+struct LessConstant {
+        double val;
+        string unit;
+
 };
 
 struct LessDef {
@@ -71,7 +73,14 @@ struct LessColor {
 	int r;
 	int g;
 	int b;
-}
+
+        static void rim(struct LessColor &color) {
+                if(color.r >= 255) color.r = 255;
+                if(color.b >= 255) color.b = 255;
+                if(color.g >= 255) color.g = 255;
+        }
+
+};
 
 struct LessSelector {
 	string	name;
@@ -88,5 +97,124 @@ struct LessCssRule {
 	string name;
 	Expression expression;
 };
+
+struct LessColor operator+(struct LessColor &a, struct LessConstant &b) {
+        struct LessColor result = a;
+        result.r += b.val;
+        result.g += b.val;
+        result.b += b.val;
+        LessColor::rim(result);
+        return result;
+}
+struct LessColor operator-(struct LessColor &a, struct LessConstant &b) {
+        struct LessColor result = a;
+        result.r -= b.val;
+        result.g -= b.val;
+        result.b -= b.val;
+        LessColor::rim(result);
+        return result;
+}
+struct LessColor operator*(struct LessColor &a, struct LessConstant &b) {
+        struct LessColor result = a;
+        result.r *= b.val;
+        result.g *= b.val;
+        result.b *= b.val;
+        LessColor::rim(result);
+        return result;
+}
+struct LessColor operator/(struct LessColor &a, struct LessConstant &b) {
+        struct LessColor result = a;
+        result.r /= b.val;
+        result.g /= b.val;
+        result.b /= b.val;
+        LessColor::rim(result);
+        return result;
+}
+
+struct LessColor operator+(struct LessColor &a, struct LessColor &b) {
+        struct LessColor result = a;
+        result.r += b.r;
+        result.g += b.g;
+        result.b += b.b;
+        LessColor::rim(result);
+        return result;
+}
+struct LessColor operator-(struct LessColor &a, struct LessColor &b) {
+        struct LessColor result = a;
+        result.r -= b.r;
+        result.g -= b.g;
+        result.b -= b.b;
+        LessColor::rim(result);
+        return result;
+}
+struct LessColor operator*(struct LessColor &a, struct LessColor &b) {
+        struct LessColor result = a;
+        result.r *= b.r;
+        result.g *= b.g;
+        result.b *= b.b;
+        LessColor::rim(result);
+        return result;
+}
+struct LessColor operator/(struct LessColor &a, struct LessColor &b) {
+        struct LessColor result = a;
+        result.r /= b.r;
+        result.g /= b.g;
+        result.b /= b.b;
+        LessColor::rim(result);
+        return result;
+}
+struct LessConstant operator+(struct LessConstant &a, struct LessConstant &b)
+{
+        struct LessConstant result;
+        result = a;
+        result.val += b.val;
+        if(a.unit != "") {
+                result.unit = a.unit;
+        } else {
+                result.unit = b.unit;
+        }
+
+        return result;
+}
+struct LessConstant operator-(struct LessConstant &a, struct LessConstant &b)
+{
+        struct LessConstant result;
+        result = a;
+        result.val -= b.val;
+        if(a.unit != "") {
+                result.unit = a.unit;
+        } else {
+                result.unit = b.unit;
+        }
+
+        return result;
+}
+struct LessConstant operator*(struct LessConstant &a, struct LessConstant &b)
+{
+        struct LessConstant result;
+        result = a;
+        result.val *= b.val;
+        if(a.unit != "") {
+                result.unit = a.unit;
+        } else {
+                result.unit = b.unit;
+        }
+
+        return result;
+}
+struct LessConstant operator/(struct LessConstant &a, struct LessConstant &b)
+{
+        struct LessConstant result;
+        result = a;
+        result.val += b.val;
+        if(a.unit != "") {
+                result.unit = a.unit;
+        } else {
+                result.unit = b.unit;
+        }
+
+        return result;
+}
+
 
 #endif
