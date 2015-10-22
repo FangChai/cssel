@@ -81,6 +81,9 @@ struct LessColor {
                 if(color.r >= 255) color.r = 255;
                 if(color.b >= 255) color.b = 255;
                 if(color.g >= 255) color.g = 255;
+                if(color.r < 0) color.r = 0;
+                if(color.g < 0) color.g = 0;
+                if(color.b < 0) color.b = 0;
         }
 
 };
@@ -230,5 +233,99 @@ struct LessConstant operator/(struct LessConstant &a, struct LessConstant &b)
         return result;
 }
 
+struct ExprElement operator+(struct ExprElement &a, struct ExprElement &b) {
+        struct ExprElement result;
+        if(a.type == COLOR) {
+                result.type = COLOR;
+                result.data = new LessColor;
+
+                if(b.type == COLOR) {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) + *((struct LessColor *)a.data);
+                } else {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) + *((struct LessConstant *)a.data);
+                }
+        } else {
+                if(b.type == COLOR) {
+                        result.type = COLOR;
+                        result.data = new LessColor;
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) + *((struct LessColor *)a.data);
+                } else {
+                        result.type = CONSTANT;
+                        result.data = new LessConstant;
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) + *((struct LessConstant *)a.data);
+                }
+        }
+
+        return result;
+}
+struct ExprElement operator-(struct ExprElement &a, struct ExprElement &b) {
+        struct ExprElement result;
+        if(a.type == COLOR) {
+                result.type = COLOR;
+                result.data = new LessColor;
+
+                if(b.type == COLOR) {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) - *((struct LessColor *)a.data);
+                } else {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) - *((struct LessConstant *)a.data);
+                }
+        } else {
+                if(b.type == COLOR) {
+                        result.type = COLOR;
+                        result.data = new LessColor;
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) - *((struct LessColor *)a.data);
+                } else {
+                        result.type = CONSTANT;
+                        result.data = new LessConstant;
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) - *((struct LessConstant *)a.data);
+                }
+        }
+
+        return result;
+}
+struct ExprElement operator*(struct ExprElement &a, struct ExprElement &b) {
+        struct ExprElement result;
+        if(a.type == COLOR) {
+                result.type = COLOR;
+                result.data = new LessColor;
+
+                if(b.type == COLOR) {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) * (*((struct LessColor *)a.data));
+                } else {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) * (*((struct LessConstant *)a.data));
+                }
+        } else {
+                if(b.type == COLOR) {
+                        result.type = COLOR;
+                        result.data = new LessColor;
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessColor *)a.data));
+                } else {
+                        result.type = CONSTANT;
+                        result.data = new LessConstant;
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessConstant *)a.data));
+                }
+        }
+
+        return result;
+}
+struct ExprElement operator/(struct ExprElement &a, struct ExprElement &b) {
+        struct ExprElement result;
+        if(a.type == COLOR) {
+                result.type = COLOR;
+                result.data = new LessColor;
+
+                if(b.type == COLOR) {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) / *((struct LessColor *)a.data);
+                } else {
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) / *((struct LessConstant *)a.data);
+                }
+        } else {
+                result.type = CONSTANT;
+                result.data = new LessConstant;
+                *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) / *((struct LessConstant *)a.data);
+        }
+
+        return result;
+}
 
 #endif
