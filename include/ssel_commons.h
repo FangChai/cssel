@@ -30,12 +30,9 @@ enum ExprElementType {
 	OP_DIV,
 };
 
-<<<<<<< HEAD
-=======
 typedef list<struct LessElement> LessBlock;
 typedef vector<struct ExprElement> Expression;
 
->>>>>>> 1742b91407df6405a0203044f23428f40b8fa50d
 struct LessElement;
 struct ExprElement;
 struct LessConstant;
@@ -79,7 +76,6 @@ struct LessColor {
 	int r;
 	int g;
 	int b;
-<<<<<<< HEAD
 
         static void rim(struct LessColor &color) {
                 if(color.r >= 255) color.r = 255;
@@ -87,8 +83,6 @@ struct LessColor {
                 if(color.g >= 255) color.g = 255;
         }
 
-=======
->>>>>>> 1742b91407df6405a0203044f23428f40b8fa50d
 };
 
 struct LessSelector {
