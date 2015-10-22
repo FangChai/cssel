@@ -65,27 +65,51 @@ LessBlock expand_mixin(PMixin mixin)
             for(auto iter2=(*iter1).rbegin();iter2!=(*iter1).rend();++iter2){
                 if(iter2->find(make_pair(mixin->name,LessElementType::NORMAL_SELECTOR))!=map::end||
                    iter2->find(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR))!=map::end){
+                    //Handling default parametric selector.
                     if(iter2->at(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR)){
-                        for(auto &elem : selector->selector_body){
-                            auto selector = PSelector(
-                            iter2->at(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR)));
-                            auto body=seletor->selector_body;
-                            auto params=seletor->params;
-                            for(auto &elem : params){
-                                LessDef to_ins({elem.name,elem.expression});
-                                body.insert(body.begin(),to_ins);
+                        auto selector = PSelector(
+                        iter2->at(make_pair(mixin->name,LessElementType::PARAMETRIC_SELECTOR)));
+                        auto body=seletor->selector_body;
+                        auto params=seletor->params;
+                        for(auto &elem : params){
+                            LessDef to_ins({elem.name,elem.expression});
+                            body.insert(body.begin(),to_ins);
+                        }
+                        //Handling recursive calls.
+                        for(auto iter3=body.begin();iter3!=body.end();++iter3){
+                            if(iter3->type==LessElementType::MIXIN){
+                                auto block = expand_mixin((PMixin)iter3->data);
+                                iter3=body.erase(iter3);
+                                LessSelector scoped_block={"",vector<LessParam>(),block};
+                                body.insert(iter3,block);
                             }
-                            return body;
                         }
-                        else{
-                            auto body=(LessSelector(iter2->at(make_pair(mixin->name,LessElementType::NORMAL_SELECTOR)))->selector_body;
-                            return body;
-                        }
+                      return body;
                     }
+                    else{
+                        auto body=(LessSelector(iter2->at(make_pair(mixin->name,LessElementType::NORMAL_SELECTOR)))->selector_body;
+                        //Handling recursive calls.
+                        for(auto iter3=body.begin();iter3!=body.end();++iter3){
+                            if(iter3->type==LessElementType::MIXIN){
+                                auto block = expand_mixin((PMixin)iter3->data);
+                                iter3=body.erase(iter3);
+                                LessSelector scoped_block={"",vector<LessParam>(),block};
+                                body.insert(iter3,block);
+                            }
+                        }
+                        return body;
+                    }
+                }
+                else {
+                //TODO:
+                //Add exception handling code
+                //When a call is not found in scope.
                 }
             }
         }
     else{
+        //Handling non-default parametric calls.
+        //Check if a valid call first.
 
     }
 }
@@ -99,5 +123,5 @@ void build_parametricselector_token(PSelector paraselector,TokenMap &tokenmap)
 }
 void build_def_token(PDef def,TokenMap &tokenmap)
 {
-    tokenmap[make_pair(def->name,LessElementType::DEF]=make_pair(LessElementType::DEF,def);
+    tokenmap[make_pair(def->name,LessElementType::DEF]=def;
 }
