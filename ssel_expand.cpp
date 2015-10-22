@@ -81,10 +81,8 @@ LessBlock expand_mixin(PMixin mixin)
     //TODO
     //Use a parallel set list to determine whether a name is in the token list.
     //Will improve the performance .
-    if(mixin->params.empty())
-                    //Handling default parametric selector.
-                    //Double call
-                    PSelector para_selector =(PSelector)find_double_call_element(mixin->name,LessElementType::PARAMETRIC_SELECTOR);
+    if(mixin->params.empty()){
+        auto ptr_para_selector =(PSelector)find_double_call_element(mixin->name,LessElementType::PARAMETRIC_SELECTOR);
                     LessBlock merged_body;
                     if(ptr_para_selector){
                         auto body=ptr_para_selector->selector_body;
@@ -109,29 +107,23 @@ LessBlock expand_mixin(PMixin mixin)
                     }
                     auto ptr_norm_selector=(PSelector)find_double_call_element(mixin->name,LessElementType::NORMAL_SELECTOR);
                     if(ptr_norm_selector){
-                        auto body=(LessSelector)ptr_norm_selector->selector_body;
+                        auto body=(ptr_norm_selector)->selector_body;
                         merged_body.insert(merged_body.end(),body.begin(),body.end());
                     }
                     return merged_body;
-                }
-                else {
-                //TODO:
-                //Add exception handling code
-                //When a call is not found in scope.
-                }
-            }
-        }
+    }
     else{
         //Handling non-default parametric calls.
         //Check if a valid call first.
         LessBlock merged_body;
         auto ptr_norm_selector=(PSelector)find_double_call_element(mixin->name,LessElementType::NORMAL_SELECTOR);
         auto ptr_para_selector=(PSelector)find_double_call_element(mixin->name,LessElementType::PARAMETRIC_SELECTOR);
-        if(ptr_para_seletor||ptr_para_selector->params.size()==mixin->params.size()){
+        if(ptr_para_selector||ptr_para_selector->params.size()==mixin->params.size()){
             LessBlock body=ptr_para_selector->selector_body;
             for(int i=0;i<mixin->params.size();++i){
-                LessDef converted_Param({ptr_para_selector->params[i].name,mixin->params[i].expression});
-                body.insert(body.begin(),converted_Param);
+                LessDef *converted_Param=new LessDef({ptr_para_selector->params[i].name,mixin->params[i]});
+                LessElement sealed({LessElementType::DEF,converted_Param});
+                body.insert(body.begin(),sealed);
             }
             merged_body.insert(merged_body.end(),body.begin(),body.end());
         }
@@ -146,7 +138,7 @@ void *find_double_call_element(string elem_name,LessElementType elem_type)
 {
     auto index=make_pair(elem_name,elem_type);
     for(auto iter=G_tokenList.rbegin();iter!=G_tokenList.rend();++iter){
-        if(iter->find(index)!=map::end){
+        if(iter->find(index)!=iter->end()){
             return iter->at(index);
         }
     }
@@ -158,9 +150,9 @@ void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap)
 }
 void build_parametricselector_token(PSelector paraselector,TokenMap &tokenmap)
 {
-    tokenmap[make_pair(paraselector->name,LessElementType::PARAMETRIC_SELECTOR)]=nselector;
+    tokenmap[make_pair(paraselector->name,LessElementType::PARAMETRIC_SELECTOR)]=paraselector;
 }
 void build_def_token(PDef def,TokenMap &tokenmap)
 {
-    tokenmap[make_pair(def->name,LessElementType::DEF]=def;
+    tokenmap[make_pair(def->name,LessElementType::DEF)]=def;
 }
