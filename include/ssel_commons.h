@@ -125,6 +125,17 @@ struct LessColor operator*(struct LessColor &a, struct LessConstant &b) {
         LessColor::rim(result);
         return result;
 }
+
+struct LessColor operator+(struct LessConstant &a, struct LessColor &b) {
+        return (b+a);
+}
+struct LessColor operator-(struct LessConstant &a, struct LessColor &b) {
+        return (b-a);
+}
+struct LessColor operator*(struct LessConstant &a, struct LessColor &b) {
+        return (b*a);
+}
+
 struct LessColor operator/(struct LessColor &a, struct LessConstant &b) {
         struct LessColor result = a;
         result.r /= b.val;
