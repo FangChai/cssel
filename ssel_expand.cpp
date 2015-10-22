@@ -2,11 +2,21 @@
 
 #include <map>
 #include <utility>
+#include <memory>
+
+
 //In order to allow same names in seletor and functional mixin.
 typedef map<pair<string,LessElementType>,void *> TokenMap;
 typedef LessDef *PDef ;
 typedef LessSelector* PSelector ;
 typedef LessMixin *PMixin ;
+void build_def_token(PDef def,TokenMap &tokenmap);
+void build_parametricselector_token(PSelector paraselector,TokenMap &tokenmap);
+void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap);
+void *find_double_call_element(string elem_name,LessElementType elem_type);
+LessBlock expand_mixin(PMixin mixin);
+
+
 list<TokenMap> G_tokenList;
 void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
     //To Tang Pro : Specify the second param as true.
@@ -42,20 +52,23 @@ void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
             case LessElementType::DEF:
                 break;
             case LessElementType::MIXIN:
-                auto block=expand_mixin((PMixin)elem.data);
-                LessSelector scoped_block={"",vector<LessParam>(),block};
+                {
+                auto block=expand_mixin((PMixin)elem->data);
+                LessSelector *scoped_block=new LessSelector({"",vector<LessParam>(),block});
+                LessElement sealed({LessElementType::NORMAL_SELECTOR,scoped_block});
                 elem=currenBlock.erase(elem);
-                currenBlock.insert(elem,scoped_block);
+                currenBlock.insert(elem,sealed );
+                }
                 break;
             case LessElementType::BLOCK_COMMENT:
                 break;
             case LessElementType::CSS_RULE:
                 break;
             case LessElementType::NORMAL_SELECTOR:
-                less_expand((PSelector)elem->data->selector_body);
+                less_expand(((PSelector)elem->data)->selector_body);
                 break;
             case LessElementType::PARAMETRIC_SELECTOR:
-                less_expand((PSelector)elem->data->selector_body);
+                less_expand(((PSelector)elem->data)->selector_body);
                 break;
         }
     }
@@ -71,15 +84,15 @@ LessBlock expand_mixin(PMixin mixin)
     if(mixin->params.empty())
                     //Handling default parametric selector.
                     //Double call
-                    auto ptr_norm_selector=(PSelector)find_double_call_element(mixin->name,LessElementType::NORMAL_SELECTOR);
-                    auto ptr_para_selector=(PSelector)find_double_call_element(mixin->name,LessElementType::PARAMETRIC_SELECTOR);
+                    PSelector para_selector =(PSelector)find_double_call_element(mixin->name,LessElementType::PARAMETRIC_SELECTOR);
                     LessBlock merged_body;
                     if(ptr_para_selector){
-                        auto body=ptr_para_seletor->selector_body;
-                        auto params=ptr_para_seletor->params;
+                        auto body=ptr_para_selector->selector_body;
+                        auto params=ptr_para_selector->params;
                         for(auto &elem : params){
-                            LessDef to_ins({elem.name,elem.expression});
-                            body.insert(body.begin(),to_ins);
+                            LessDef *to_ins=new LessDef({elem.name,elem.expression});
+                            LessElement sealed({LessElementType::DEF,to_ins});
+                            body.insert(body.begin(),sealed);
                         }
                         /*
                         //Handling recursive calls.
@@ -94,6 +107,7 @@ LessBlock expand_mixin(PMixin mixin)
                         */
                         merged_body.insert(merged_body.end(),body.begin(),body.end());
                     }
+                    auto ptr_norm_selector=(PSelector)find_double_call_element(mixin->name,LessElementType::NORMAL_SELECTOR);
                     if(ptr_norm_selector){
                         auto body=(LessSelector)ptr_norm_selector->selector_body;
                         merged_body.insert(merged_body.end(),body.begin(),body.end());
