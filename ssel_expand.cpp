@@ -14,11 +14,50 @@ void build_def_token(PDef def,TokenMap &tokenmap);
 void build_parametricselector_token(PSelector paraselector,TokenMap &tokenmap);
 void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap);
 void *find_double_call_element(string elem_name,LessElementType elem_type);
-LessBlock expand_mixin(PMixin mixin);
+void less_expand(LessBlock& currenBlock);
 
+LessBlock expand_mixin(PMixin mixin);
+//TODO
+//Debug purpose main function
+//Remove before release.
+int main(int argc,char** argv)
+{
+    //Construct test data.
+
+    //Test.1. selector expand.(no param)
+    auto selector1=new LessSelector;
+    auto selector1_elem=new LessElement;
+    auto selector2=new LessSelector;
+    auto selector2_elem=new LessElement;
+    auto mixin_call=new LessMixin;
+    auto mixin_call_elem=new LessElement;
+    auto css_rule=new LessCssRule;
+    auto css_rule_elem=new LessElement;
+    auto css_rule_expr_elem=new ExprElement;
+    auto css_rule_expr_elem_filler=new string;
+    (*css_rule_expr_elem_filler)="background=gray;";
+    css_rule_expr_elem->type=ExprElementType::STRING;
+    css_rule_expr_elem->data=css_rule_expr_elem_filler;
+    css_rule->name="filter";
+    css_rule->expression.push_back(*css_rule_expr_elem);
+    css_rule_elem->type=LessElementType::CSS_RULE;
+    css_rule_elem->data=css_rule;
+    mixin_call->name=".selector2";
+    mixin_call_elem->type=LessElementType::MIXIN;
+    mixin_call_elem->data=mixin_call;
+    selector1->name=".selector1";
+    selector2->name=".selector2";
+    selector1->selector_body.push_back(*mixin_call_elem);
+    selector2->selector_body.push_back(*css_rule_elem);
+    LessBlock testful_block;
+    testful_block.push_back(*selector1_elem);
+    testful_block.push_back(*selector2_elem);
+    less_expand(testful_block);
+    return 0;
+}
 
 list<TokenMap> G_tokenList;
-void less_expand(LessBlock& currenBlock,bool firstInvoke=false)
+void less_expand(LessBlock& currenBlock)
     //To Tang Pro : Specify the second param as true.
 {
     TokenMap tokenizer;
