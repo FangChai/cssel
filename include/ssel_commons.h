@@ -133,8 +133,27 @@ struct LessColor operator+(struct LessConstant &a, struct LessColor &b) {
         return (b+a);
 }
 struct LessColor operator-(struct LessConstant &a, struct LessColor &b) {
-        return (b-a);
+        struct LessColor result;
+        result.r = result.g = result.b = a.val;
+        result.r -= b.r;
+        result.g -= b.g;
+        result.b -= b.b;
+        LessColor::rim(result);
+        return result;
+
 }
+
+struct LessColor operator/(struct LessConstant &a, struct LessColor &b) {
+        struct LessColor result;
+        result.r = result.g = result.b = a.val;
+        result.r /= b.r;
+        result.g /= b.g;
+        result.b /= b.b;
+        LessColor::rim(result);
+        return result;
+
+}
+
 struct LessColor operator*(struct LessConstant &a, struct LessColor &b) {
         return (b*a);
 }
@@ -206,6 +225,14 @@ struct LessConstant operator-(struct LessConstant &a, struct LessConstant &b)
 
         return result;
 }
+struct LessConstant operator-(struct LessConstant &a)
+{
+        struct LessConstant result;
+        result.unit = a.unit;
+        result.val = -a.val;
+
+        return result;
+}
 struct LessConstant operator*(struct LessConstant &a, struct LessConstant &b)
 {
         struct LessConstant result;
@@ -223,7 +250,7 @@ struct LessConstant operator/(struct LessConstant &a, struct LessConstant &b)
 {
         struct LessConstant result;
         result = a;
-        result.val += b.val;
+        result.val /= b.val;
         if(a.unit != "") {
                 result.unit = a.unit;
         } else {
@@ -240,19 +267,19 @@ struct ExprElement operator+(struct ExprElement &a, struct ExprElement &b) {
                 result.data = new LessColor;
 
                 if(b.type == COLOR) {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) + *((struct LessColor *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) + *((struct LessColor *)b.data);
                 } else {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) + *((struct LessConstant *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) + *((struct LessConstant *)b.data);
                 }
         } else {
                 if(b.type == COLOR) {
                         result.type = COLOR;
                         result.data = new LessColor;
-                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) + *((struct LessColor *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) + *((struct LessColor *)b.data);
                 } else {
                         result.type = CONSTANT;
                         result.data = new LessConstant;
-                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) + *((struct LessConstant *)a.data);
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) + *((struct LessConstant *)b.data);
                 }
         }
 
@@ -265,21 +292,30 @@ struct ExprElement operator-(struct ExprElement &a, struct ExprElement &b) {
                 result.data = new LessColor;
 
                 if(b.type == COLOR) {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) - *((struct LessColor *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) - *((struct LessColor *)b.data);
                 } else {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) - *((struct LessConstant *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) - *((struct LessConstant *)b.data);
                 }
         } else {
                 if(b.type == COLOR) {
                         result.type = COLOR;
                         result.data = new LessColor;
-                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) - *((struct LessColor *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) - *((struct LessColor *)b.data);
                 } else {
                         result.type = CONSTANT;
                         result.data = new LessConstant;
-                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) - *((struct LessConstant *)a.data);
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) - *((struct LessConstant *)b.data);
                 }
         }
+
+        return result;
+}
+struct ExprElement operator-(struct ExprElement &a) {
+        struct ExprElement result;
+
+        result.type = CONSTANT;
+        result.data = new LessConstant;
+        *((struct LessConstant *)result.data) = - *((struct LessConstant *)(a.data));
 
         return result;
 }
@@ -290,19 +326,19 @@ struct ExprElement operator*(struct ExprElement &a, struct ExprElement &b) {
                 result.data = new LessColor;
 
                 if(b.type == COLOR) {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) * (*((struct LessColor *)a.data));
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) * (*((struct LessColor *)b.data));
                 } else {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) * (*((struct LessConstant *)a.data));
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) * (*((struct LessConstant *)b.data));
                 }
         } else {
                 if(b.type == COLOR) {
                         result.type = COLOR;
                         result.data = new LessColor;
-                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessColor *)a.data));
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessColor *)b.data));
                 } else {
                         result.type = CONSTANT;
                         result.data = new LessConstant;
-                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessConstant *)a.data));
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessConstant *)b.data));
                 }
         }
 
@@ -315,15 +351,21 @@ struct ExprElement operator/(struct ExprElement &a, struct ExprElement &b) {
                 result.data = new LessColor;
 
                 if(b.type == COLOR) {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) / *((struct LessColor *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) / *((struct LessColor *)b.data);
                 } else {
-                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) / *((struct LessConstant *)a.data);
+                        *((struct LessColor*)result.data) = *((struct LessColor *)a.data) / *((struct LessConstant *)b.data);
                 }
         } else {
-                result.type = CONSTANT;
-                result.data = new LessConstant;
-                *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) / *((struct LessConstant *)a.data);
-        }
+                if(b.type == COLOR) {
+                        result.type = COLOR;
+                        result.data = new LessColor;
+                        *((struct LessColor*)result.data) = *((struct LessConstant *)a.data) / (*((struct LessColor *)b.data));
+                } else {
+                        result.type = CONSTANT;
+                        result.data = new LessConstant;
+                        *((struct LessConstant*)result.data) = *((struct LessConstant *)a.data) * (*((struct LessConstant *)b.data));
+                }
+         }
 
         return result;
 }

@@ -1,0 +1,346 @@
+============constant +-*/ and negative
+        Expression expr;
+        ExprElement ele;
+        LessConstant *pconstant;
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 44;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = OP_DIV;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 22;
+        pconstant->unit = "cm";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        eval_expr(expr);
+
+        pconstant = (LessConstant *)expr[0].data;
+        cout << pconstant->val << pconstant->unit << endl;
+============>passed
+
+============color && color  +-*/
+        ele.type = COLOR;
+        color = new LessColor;
+        color->r = 10;
+        color->g = 9;
+        color->b = 8;
+        ele.data = color;
+        expr.push_back(ele);
+
+        ele.type = OP_SUB;
+        expr.push_back(ele);
+
+        ele.type = COLOR;
+        color = new LessColor;
+        color->r = 300;
+        color->g = 200;
+        color->b = 300;
+        ele.data = color;
+        expr.push_back(ele);
+
+        eval_expr(expr);
+
+        color = (LessColor *)expr[0].data;
+        cout << color->r<<" " << color->g<<" " <<color->b << endl;
+============>passed        
+
+============color && constant +-*/ and reverse
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 22;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+
+        ele.type = OP_DIV;
+        expr.push_back(ele);
+
+        ele.type = COLOR;
+        color = new LessColor;
+        color->r = 1;
+        color->g = 2;
+        color->b = 3;
+        ele.data = color;
+        expr.push_back(ele);
+
+
+        eval_expr(expr);
+
+        color = (LessColor *)expr[0].data;
+        cout << color->r<<" " << color->g<<" " <<color->b << endl;
+============>passed
+
+============mix test1: 12+34cm+(34 - 2)*4 = 174cm
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 12;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+
+        ele.type = OP_ADD;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 34;
+        pconstant->unit = "cm";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = OP_ADD;
+        expr.push_back(ele);
+
+        ele.type = LEFT_BRACE;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 34;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = OP_SUB;
+        expr.push_back(ele);
+
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 2;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = RIGHT_BRACE;
+        expr.push_back(ele);
+
+        ele.type = OP_MUL;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 4;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+============>passed
+
+============mix test2: #ff0301+34+(#030303 - 2)*4 = #ff2927
+        ele.type = COLOR;
+        color = new LessColor;
+        color->r = 0xff;
+        color->g = 0x03;
+        color->b = 0x01;
+        ele.data = color;
+        expr.push_back(ele);
+
+
+        ele.type = OP_ADD;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 34;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = OP_ADD;
+        expr.push_back(ele);
+
+        ele.type = LEFT_BRACE;
+        expr.push_back(ele);
+
+        ele.type = COLOR;
+        color = new LessColor;
+        color->r = 0x03;
+        color->g = 0x03;
+        color->b = 0x03;
+        ele.data = color;
+        expr.push_back(ele);
+
+
+        ele.type = OP_SUB;
+        expr.push_back(ele);
+
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 2;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = RIGHT_BRACE;
+        expr.push_back(ele);
+
+        ele.type = OP_MUL;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 4;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+============>passed
+
+===========name look up and @ operator
+        //construct a def
+        def = new LessDef;
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 12;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+
+        ele.type = OP_ADD;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 34;
+        pconstant->unit = "cm";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = OP_ADD;
+        expr.push_back(ele);
+
+        ele.type = LEFT_BRACE;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 34;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = OP_SUB;
+        expr.push_back(ele);
+
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 2;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        ele.type = RIGHT_BRACE;
+        expr.push_back(ele);
+
+        ele.type = OP_MUL;
+        expr.push_back(ele);
+
+        ele.type = CONSTANT;
+        pconstant = new LessConstant;
+        pconstant->val = 4;
+        pconstant->unit = "";
+        ele.data = pconstant;
+        expr.push_back(ele);
+
+        def->expression = expr;
+        def->name = "a";
+
+        element = new LessElement;
+        element->type = DEF;
+        element->data = def;
+
+
+        block.push_back(*element);
+
+
+        //construct a expr to be evaluated
+
+        element->type = CSS_RULE;
+        rule = new LessCssRule;
+        element->data = rule;
+
+        rule->name = "haha";
+
+        expr.clear();
+
+        ele.type = STRING;
+        str = new string;
+        *str = "\"a\"";
+        ele.data = str;
+        expr.push_back(ele);
+
+        rule->expression = expr;
+
+        block.push_back(*element);
+
+
+        eval_block(block);
+
+        auto iter=block.begin();
+        iter++;
+        pconstant =(LessConstant *) ((LessCssRule *)(*iter).data)->expression[0].data;
+============>passed
+
+============string insertion
+============@a = "string";
+============hehe : "cha@{a}zhi";
+============================
+        //the def
+        element.type = DEF;
+
+        def = new LessDef;
+        def->name = "a";
+
+        ele.type = STRING;
+
+        str = new string;
+        *str = "string";
+
+        ele.data = str;
+
+        def->expression.push_back(ele);
+
+        element.data = def;
+
+        block.push_back(element);
+
+        //the rule
+        element.type = CSS_RULE;
+
+        rule = new LessCssRule;
+        rule->name = "hehe";
+
+        ele.type = STRING;
+
+        str = new string;
+        *str = "cha@{a}zhi";
+
+        ele.data = str;
+
+        rule->expression.push_back(ele);
+
+        element.data = rule;
+
+        block.push_back(element);
+        eval_block(block);
+
+        auto iter = block.end();
+        iter--;
+        rule = (LessCssRule*) iter->data;
+        str = (string *)rule->expression[0].data;
+
+        cout << *str <<endl;
+============>passed
