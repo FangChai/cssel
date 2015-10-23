@@ -1,0 +1,46 @@
+﻿生成启动时间为 2015/10/23 21:22:08。
+     1>项目“C:\Users\fangb\Documents\repos\cssel\css\cssel.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ssel_expand.cpp
+         ssel_expand.cpp
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(109): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(110): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(111): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(117): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(118): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(119): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(125): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(126): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(127): warning C4244: '*=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(144): warning C4244: '/=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(145): warning C4244: '/=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\include\ssel_commons.h(146): warning C4244: '/=': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\fangb\documents\repos\cssel\css\ssel_expand.cpp(166): warning C4018: '<': signed/unsigned mismatch
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\fangb\Documents\repos\cssel\css\Debug\cssel.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\fangb\Documents\repos\cssel\css\Debug\cssel.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\fangb\Documents\repos\cssel\css\Debug\cssel.lib" /MACHINE:X86 Debug\ssel_expand.obj
+         Debug\ssel_output.obj
+     1>ssel_output.obj : error LNK2005: "struct ExprElement __cdecl operator*(struct ExprElement &,struct ExprElement &)" (??D@YA?AUExprElement@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator*(struct LessColor &,struct LessColor &)" (??D@YA?AULessColor@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator*(struct LessColor &,struct LessConstant &)" (??D@YA?AULessColor@@AAU0@AAULessConstant@@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator*(struct LessConstant &,struct LessColor &)" (??D@YA?AULessColor@@AAULessConstant@@AAU0@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessConstant __cdecl operator*(struct LessConstant &,struct LessConstant &)" (??D@YA?AULessConstant@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct ExprElement __cdecl operator-(struct ExprElement &,struct ExprElement &)" (??G@YA?AUExprElement@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator-(struct LessColor &,struct LessColor &)" (??G@YA?AULessColor@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator-(struct LessColor &,struct LessConstant &)" (??G@YA?AULessColor@@AAU0@AAULessConstant@@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator-(struct LessConstant &,struct LessColor &)" (??G@YA?AULessColor@@AAULessConstant@@AAU0@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessConstant __cdecl operator-(struct LessConstant &,struct LessConstant &)" (??G@YA?AULessConstant@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct ExprElement __cdecl operator+(struct ExprElement &,struct ExprElement &)" (??H@YA?AUExprElement@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator+(struct LessColor &,struct LessColor &)" (??H@YA?AULessColor@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator+(struct LessColor &,struct LessConstant &)" (??H@YA?AULessColor@@AAU0@AAULessConstant@@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator+(struct LessConstant &,struct LessColor &)" (??H@YA?AULessColor@@AAULessConstant@@AAU0@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessConstant __cdecl operator+(struct LessConstant &,struct LessConstant &)" (??H@YA?AULessConstant@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct ExprElement __cdecl operator/(struct ExprElement &,struct ExprElement &)" (??K@YA?AUExprElement@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator/(struct LessColor &,struct LessColor &)" (??K@YA?AULessColor@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessColor __cdecl operator/(struct LessColor &,struct LessConstant &)" (??K@YA?AULessColor@@AAU0@AAULessConstant@@@Z) already defined in ssel_expand.obj
+     1>ssel_output.obj : error LNK2005: "struct LessConstant __cdecl operator/(struct LessConstant &,struct LessConstant &)" (??K@YA?AULessConstant@@AAU0@0@Z) already defined in ssel_expand.obj
+     1>C:\Users\fangb\Documents\repos\cssel\css\Debug\cssel.exe : fatal error LNK1169: one or more multiply defined symbols found
+     1>已完成生成项目“C:\Users\fangb\Documents\repos\cssel\css\cssel.vcxproj”(Build 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:01.34

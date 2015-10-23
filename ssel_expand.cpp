@@ -92,11 +92,13 @@ void less_expand(LessBlock& currenBlock)
                 break;
             case LessElementType::MIXIN:
                 {
-                auto block=expand_mixin((PMixin)elem->data);
-                LessSelector *scoped_block=new LessSelector({"",vector<LessParam>(),block});
-                LessElement sealed({LessElementType::NORMAL_SELECTOR,scoped_block});
-                elem=currenBlock.erase(elem);
-                currenBlock.insert(elem,sealed );
+					auto block=expand_mixin((PMixin)elem->data);
+					LessSelector *scoped_block=new LessSelector({"",vector<LessParam>(),block});
+					LessElement sealed;
+					sealed.type = LessElementType::NORMAL_SELECTOR;
+					sealed.data = scoped_block;
+					elem=currenBlock.erase(elem);
+					currenBlock.insert(elem,sealed );
                 }
                 break;
             case LessElementType::BLOCK_COMMENT:
@@ -128,7 +130,9 @@ LessBlock expand_mixin(PMixin mixin)
                         auto params=ptr_para_selector->params;
                         for(auto &elem : params){
                             LessDef *to_ins=new LessDef({elem.name,elem.expression});
-                            LessElement sealed({LessElementType::DEF,to_ins});
+							LessElement sealed;
+							sealed.type = LessElementType::DEF;
+							sealed.data = to_ins;
                             body.insert(body.begin(),sealed);
                         }
                         /*
@@ -161,7 +165,9 @@ LessBlock expand_mixin(PMixin mixin)
             LessBlock body=ptr_para_selector->selector_body;
             for(int i=0;i<mixin->params.size();++i){
                 LessDef *converted_Param=new LessDef({ptr_para_selector->params[i].name,mixin->params[i]});
-                LessElement sealed({LessElementType::DEF,converted_Param});
+				LessElement sealed;
+				sealed.type = LessElementType::DEF;
+				sealed.data = converted_Param;
                 body.insert(body.begin(),sealed);
             }
             merged_body.insert(merged_body.end(),body.begin(),body.end());
