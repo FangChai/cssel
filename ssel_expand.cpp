@@ -64,14 +64,14 @@ void less_expand(LessBlock& currenBlock)
     //To Tang Pro : Specify the second param as true.
 {
     TokenMap tokenizer;
-    for(auto &elem : currenBlock){
-        switch(elem.type){
+    for(auto elem = currenBlock.begin();elem!=currenBlock.end();++elem){
+        switch(elem->type){
             case LessElementType::DEF:
                 //build_def_token((PDef)elem.data,tokenizer);
                 //Legacy code
                 break;
             case LessElementType::NORMAL_SELECTOR:
-                build_normalselector_token((PSelector)elem.data,tokenizer );
+                build_normalselector_token((PSelector)(elem->data),tokenizer );
                 break;
             case LessElementType::BLOCK_COMMENT:
                 break;
@@ -80,7 +80,8 @@ void less_expand(LessBlock& currenBlock)
             case LessElementType::CSS_RULE:
                 break;
             case LessElementType::PARAMETRIC_SELECTOR:
-                build_parametricselector_token((PSelector)elem.data,tokenizer);
+                build_parametricselector_token((PSelector)(elem->data),tokenizer);
+                elem=currenBlock.erase(elem);//Might cause pointer to be freed.
                 break;
             default:
                 break;
@@ -89,6 +90,26 @@ void less_expand(LessBlock& currenBlock)
     //Add the tokenmap to token list.
     G_tokenList.push_back(tokenizer);
     //Second time scan.
+    for(auto elem =currenBlock.begin();elem!=currenBlock.end();++elem)
+    {
+        switch(elem->type){
+            case LessElementType::DEF:
+                break;
+            case LessElementType::MIXIN:
+                break;
+            case LessElementType::BLOCK_COMMENT:
+                break;
+            case LessElementType::CSS_RULE:
+                break;
+            case LessElementType::NORMAL_SELECTOR:
+                less_expand(((PSelector)elem->data)->selector_body);
+                break;
+            case LessElementType::PARAMETRIC_SELECTOR:
+                less_expand(((PSelector)elem->data)->selector_body);
+                break;
+        }
+    }
+    //Third time scan
     for(auto elem =currenBlock.begin();elem!=currenBlock.end();++elem)
     {
         switch(elem->type){
@@ -110,13 +131,12 @@ void less_expand(LessBlock& currenBlock)
             case LessElementType::CSS_RULE:
                 break;
             case LessElementType::NORMAL_SELECTOR:
-                less_expand(((PSelector)elem->data)->selector_body);
                 break;
             case LessElementType::PARAMETRIC_SELECTOR:
-                less_expand(((PSelector)elem->data)->selector_body);
                 break;
         }
     }
+
     //Throw away token list never to be use.
     //Make sure the token list is always at the same depth as our analyze goes.
     G_tokenList.pop_back();
