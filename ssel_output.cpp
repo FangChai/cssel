@@ -66,6 +66,8 @@ void write_css_file(ofstream &output_stream,const LessBlock& toWrite,bool firstI
             case LessElementType::CSS_RULE:
                 {
                     auto p_css_rule=(LessCssRule *)elem.data;
+                    auto css_name = p_css_rule->name+" : ";
+                    *++o_iter=css_name;
                     for (auto &rule : p_css_rule->expression){
                         switch(rule.type){
                             case ExprElementType::CONSTANT:
@@ -80,7 +82,7 @@ void write_css_file(ofstream &output_stream,const LessBlock& toWrite,bool firstI
                             case ExprElementType::STRING:
                                 {
                                     auto p_string=(string *) rule.data;
-                                    *++o_iter=(*p_string)+"; ";
+                                    *++o_iter=(*p_string)+";";
                                 }
                                 break;
                             case ExprElementType::COLOR:
