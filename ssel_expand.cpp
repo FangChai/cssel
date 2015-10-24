@@ -34,8 +34,7 @@ int main(int argc,char** argv)
     auto css_rule=new LessCssRule;
     auto css_rule_elem=new LessElement;
     auto css_rule_expr_elem=new ExprElement;
-    auto css_rule_expr_elem_filler=new string;
-    (*css_rule_expr_elem_filler)="background=gray;";
+    auto css_rule_expr_elem_filler=new string("background=gray");
     css_rule_expr_elem->type=ExprElementType::STRING;
     css_rule_expr_elem->data=css_rule_expr_elem_filler;
     css_rule->name="filter";
@@ -49,6 +48,10 @@ int main(int argc,char** argv)
     selector2->name=".selector2";
     selector1->selector_body.push_back(*mixin_call_elem);
     selector2->selector_body.push_back(*css_rule_elem);
+    selector1_elem->type=LessElementType::NORMAL_SELECTOR;
+    selector2_elem->type=LessElementType::NORMAL_SELECTOR;
+    selector1_elem->data=selector1;
+    selector2_elem->data=selector2;
     LessBlock testful_block;
     testful_block.push_back(*selector1_elem);
     testful_block.push_back(*selector2_elem);
@@ -64,7 +67,8 @@ void less_expand(LessBlock& currenBlock)
     for(auto &elem : currenBlock){
         switch(elem.type){
             case LessElementType::DEF:
-                build_def_token((PDef)elem.data,tokenizer);
+                //build_def_token((PDef)elem.data,tokenizer);
+                //Legacy code
                 break;
             case LessElementType::NORMAL_SELECTOR:
                 build_normalselector_token((PSelector)elem.data,tokenizer );
