@@ -43,11 +43,13 @@
 3.处理步骤：
 	tokenize：
         	将less源文件转换成内部表示(aka LessBlock), 详见“数据结构”一节
+        eval1:
+        	将与参数无关的Expression变成只有变成只有一个ExprElement的vector，且其type为Constant或string或Color
 	expand:
 		去除所有内部表示中的mixin，paramatic selector
 		对mixin的处理，将参入表与实际传入参数替换成相应的声明语句
-	eval:
-		将所有Expresssion的type变为Constant或string
+	eval2:
+		利用expand阶段中新插入的声明语句，将所有剩下的Expresssion变成只有一个ExprElement的vector，且其type为Constant或string或Color
 	output：
 		整合输出
 
