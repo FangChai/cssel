@@ -119,31 +119,37 @@ void print_expression(Expression &expr)
                         cout<<"constant:"<<pconst->val<<pconst->unit<<endl;
                         break;
                 case STRING:
-                        cout<<"string:"<<*((string*)iter->data)<<endl;
+                        cout<<"string:"<<*((string*)iter->data)<<"\n"<<endl;
                         break;
+                case COLOR:
+                        cout<<"color:";
+                        cout<<"r:"<<((LessColor *)iter->data)->r;
+                        cout<<"g:"<<((LessColor *)iter->data)->r;
+                        cout<<"b:"<<((LessColor *)iter->data)->r;
+                        cout<<"\n"<<endl;
                 case LEFT_BRACE:
-                        cout<<"left brace"<<endl;
+                        cout<<"left brace\n"<<endl;
                         break;
                 case RIGHT_BRACE:
-                        cout<<"right brace"<<endl;
+                        cout<<"right brace\n"<<endl;
                         break;
                 case OP_AT:
-                        cout<<"operator @"<<endl;
+                        cout<<"operator @\n"<<endl;
                         break;
                 case OP_ADD:
-                        cout<<"operator +"<<endl;
+                        cout<<"operator +\n"<<endl;
                         break;
                 case OP_NEG:
-                        cout<<"operator negative"<<endl;
+                        cout<<"operator negative\n"<<endl;
                         break;
                 case OP_SUB:
-                        cout<<"operator sub"<<endl;
+                        cout<<"operator sub\n"<<endl;
                         break;
                 case OP_MUL:
-                        cout<<"operator *"<<endl;
+                        cout<<"operator *\n"<<endl;
                         break;
                 case OP_DIV:
-                        cout<<"operator /"<<endl;
+                        cout<<"operator /\n"<<endl;
                         break;
                 default:
                         break;
