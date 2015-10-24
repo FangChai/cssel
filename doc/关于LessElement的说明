@@ -174,10 +174,23 @@ OP_AT OP_AT b
 三个ExprElement,其中b为string
 
 =================================
-补充：关于Operator
+关于Operator
 =================================
 单目运算符：OP_AT(@) OP_NEG(-)
 双目运算符：OP_MUL(*) OP_DIV(/) OP_ADD(+) OP_SUB(-)
 运算结合结合性：单目运算符右结合，双目运算符左结合
-=================================
 
+=================================
+各个数据类型支持的运算以及隐式转换规则
+=================================
+constant，支持负号
+string，支持@运算（变量引用）
+color，不支持单目运算
+
+constant与constant，支持加减乘除
+constant与color，支持加减乘除
+color与color，支持加减乘除
+
+隐式转换：
+无单位的constant与有单位的constant进行双目运算时，无单位的constant会隐式转换成带单位的constant，单位与另一操作数一致
+constant与color进行运算时，constant单位被抛弃，且被隐式转换为color类型，其rgb分量均为constant的值取整
