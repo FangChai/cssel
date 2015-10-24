@@ -62,6 +62,7 @@ int purify_string(string &str)
 
 //look up an Expression named "name", return a copy of the expression
 //it's the caller's duty to dequote the name
+// returns an empty Expression if nothing was found
 Expression look_up_symtbl(const string &name)
 {
         auto iter=symtbl_list.end();
@@ -77,7 +78,8 @@ Expression look_up_symtbl(const string &name)
 
         }while(iter != symtbl_list.begin());
 
-        assert(0);
+        Expression empty_expr;
+        return empty_expr;
 
 }
 
@@ -112,7 +114,7 @@ int main()
         LessElement element;
         LessCssRule *rule;
         string* str;
-
+        eval_block(block);
 
 //        color = (LessColor *)expr[0].data;
 //        cout << pconstant->val << pconstant->unit <<endl;
@@ -122,6 +124,9 @@ int main()
 }
 
 //evaluate an expression, replace it directly  with the evaluated one
+//returns -1 if evaluation failed(because some variable can't be resolved in current context
+//if it returns -1, expr won't be changed, and it would be left to stage eval2
+//it's for sure that everything is solvable when in stage eval2
 int eval_expr(Expression &expr)
 {
         stack<struct ExprElement> eval_stack, op_stack;
@@ -174,8 +179,6 @@ int eval_expr(Expression &expr)
 //evaluate
 
         for(auto ele_iter = NPR_expr.begin(); ele_iter != NPR_expr.end(); ++ele_iter) {
-                ExprElementType expr_type = CONSTANT; //the final type of this expression
-                string unit = "";
                 struct ExprElement operand1, operand2;
                 string var_name;
                 Expression temp_expression;
@@ -231,15 +234,22 @@ int eval_expr(Expression &expr)
                         eval_stack.push(-operand1);
                         break;
 
-                case OP_AT:
+                case OP_AT:      //this case is special,
+                                 // if we encounter something we can't de-referrence, we'll leave expr as it is
                         operand1 = eval_stack.top();
                         eval_stack.pop();
 
                         var_name = *((string *)(operand1.data));
                         purify_string(var_name);
                         var_name = de_quote(var_name);
-                        temp_expression = look_up_symtbl(var_name);
-                        eval_expr(temp_expression);
+                        temp_expression = look_up_symtbl(var_name);  //don't pollute the definitions
+
+                        if(0 == temp_expression.size())
+                                return -1;
+
+                        if(-1 == eval_expr(temp_expression))
+                                return -1;
+
                         eval_stack.push(temp_expression[0]);
                         break;
 
@@ -248,17 +258,19 @@ int eval_expr(Expression &expr)
 
 
         }
+
         expr.clear();
         if(eval_stack.top().type == STRING) {
                 purify_string(*((string *)eval_stack.top().data));
         }
         expr.push_back(eval_stack.top());
+
         return 0;
 
 }
 
 
-//evaluate all the property:expression pair with a block, recursively
+//evaluate all the property:expression pair within a block, recursively
 int eval_block(LessBlock &block)
 {
         symtbl_list.push_back(map<string, Expression *>());
