@@ -99,7 +99,7 @@ void less_expand(LessBlock& currenBlock)
 					auto block=expand_mixin((PMixin)elem->data);
 					LessSelector *scoped_block=new LessSelector({"",vector<LessParam>(),block});
 					LessElement sealed;
-					sealed.type = LessElementType::NORMAL_SELECTOR;
+                    sealed.type = LessElementType::PARAMETRIC_SELECTOR;
 					sealed.data = scoped_block;
 					elem=currenBlock.erase(elem);
 					currenBlock.insert(elem,sealed );
