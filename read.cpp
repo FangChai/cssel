@@ -155,6 +155,9 @@ Expression *getexpr(string::iterator iter_begin, string::iterator iter_end){
                                 ExprElement* expr = new ExprElement;
                                 bool nflag = 0;
 
+                                if(t->size() == 0) {
+                                        nflag =1;
+                                }else {
                                 switch((*t)[t->size()-1].type){
                                 case OP_ADD:
                                 case OP_SUB:
@@ -162,6 +165,7 @@ Expression *getexpr(string::iterator iter_begin, string::iterator iter_end){
                                 case OP_DIV:
                                 case LEFT_BRACE:
                                         nflag = 1;
+                                }
                                 }
 
                                 if(nflag)
@@ -171,7 +175,7 @@ Expression *getexpr(string::iterator iter_begin, string::iterator iter_end){
                                 t->push_back(*expr);
                                 iter_begin++;
                         }
-                        else if(*iter_begin == '('){
+                        else if(*iter_begin == '(') {
                                 ExprElement* expr = new ExprElement;
                                 expr->type = LEFT_BRACE;
                                 t->push_back(*expr);
@@ -204,7 +208,7 @@ Expression *getexpr(string::iterator iter_begin, string::iterator iter_end){
                         else if(numberjudge(*iter_begin)){
                                 ExprElement* expr = new ExprElement;
 
-                                if(t->size() - 1 == 0 || (*t)[t->size() - 1].type  ==  OP_AT) {
+                                if(t->size() != 0 && (*t)[t->size() - 1].type  ==  OP_AT) {
 					expr->type = STRING;
                                         string*temps = new string;
 
