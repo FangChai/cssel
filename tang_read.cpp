@@ -1,5 +1,8 @@
-#include "f.h"
+#include "./include/ssel_commons.h"
 #include<cstdio>
+#include <fstream>
+#include <iostream>
+
 #include<cstdlib>
 #include<cstring>
 #include <utility>
@@ -75,12 +78,12 @@ int getnumber(string*s){
 }
 Expression*getexpr(string*s){
 	Expression*t=new Expression;t->clear();
-	char scaner;string*exprstr=new string;	
+	char scaner;string*exprstr=new string;
 	filt(scaner,s,exprstr);if(scaner=='\0')return t;
 	bool flag=1;*exprstr="";
 	if(scaner=='@')
-		if(s[0][0]!='{') 
-			flag=0; 
+		if(s[0][0]!='{')
+			flag=0;
 	if(scaner=='+')flag=0;
 	if(scaner=='*')flag=0;
 	if(scaner=='/')flag=0;
@@ -88,13 +91,13 @@ Expression*getexpr(string*s){
 	if(scaner=='(')flag=0;
 	if(scaner=='-'){
 		bool flag2=1;*exprstr+='-';filt(scaner,s,exprstr);
-		if(scaner=='@')flag2=0; 
+		if(scaner=='@')flag2=0;
 		if(scaner=='(')flag2=0;
 		if((scaner>='0')and(scaner<='9'))flag2=0;
 		if(!flag2){
 		    ExprElement*neg=new ExprElement;
 		    neg->type=OP_NEG;neg->data=NULL;
-		    t->push_back(*neg);delete neg; 
+		    t->push_back(*neg);delete neg;
 	     	flag=0;
 	    }
 	}
@@ -105,8 +108,8 @@ Expression*getexpr(string*s){
 				k=i;
 				if(!judge16(s[0][i]))flag2=0;
 			}
-		if(k!=2)flag2=0; 
-		if(flag2){flag=0;} 
+		if(k!=2)flag2=0;
+		if(flag2){flag=0;}
 			else{*exprstr+='#';}
 	}
 	if(scaner=='r'){
@@ -144,17 +147,18 @@ Expression*getexpr(string*s){
 	    STR->type=STRING;
 	    STR->data=reinterpret_cast<void*>(exprstr);
 	    t->push_back(*STR); delete STR;
-	} 
+	}
 	else{
 		delete exprstr;
 		while(!s->empty()){
 				if((scaner==' ')or(scaner=='\n'))scaner=filt(s);
+                if(scaner=='\0') break;
 				if(scaner=='@'){
-					ExprElement*expr=new ExprElement; 
+					ExprElement*expr=new ExprElement;
 					expr->type=OP_AT;expr->data=NULL;
-					t->push_back(*expr);delete expr; 
+					t->push_back(*expr);delete expr;
 					expr=new ExprElement;
-					expr->type=STRING;string*temps=new string;*temps=""; 
+					expr->type=STRING;string*temps=new string;*temps="";
 					while(varjudge(scaner=popchar(s)))*temps+=scaner;
 					expr->data=reinterpret_cast<void*>(temps);
 					t->push_back(*expr);delete expr;
@@ -176,13 +180,13 @@ Expression*getexpr(string*s){
 						else{expr->type=OP_SUB;}
 					t->push_back(*expr);delete expr;
 					scaner=popchar(s);
-					continue;						
+					continue;
 				}
 				if(scaner=='('){
 					ExprElement*expr=new ExprElement;
 					expr->type=LEFT_BRACE;expr->data=NULL;
 					t->push_back(*expr);delete expr;
-					scaner=popchar(s); 	
+					scaner=popchar(s);
 					continue;
 				}
 				if(scaner==')'){
@@ -196,21 +200,21 @@ Expression*getexpr(string*s){
 					ExprElement*expr=new ExprElement;
 					expr->type=OP_SUB;expr->data=NULL;
 					t->push_back(*expr);delete expr;
-					scaner=popchar(s); 
+					scaner=popchar(s);
 					continue;
-				} 
+				}
 				if(scaner=='*'){
 					ExprElement*expr=new ExprElement;
 					expr->type=OP_MUL;expr->data=NULL;
 					t->push_back(*expr);delete expr;
-					scaner=popchar(s); 
+					scaner=popchar(s);
 					continue;
 				}
 				if(scaner=='/'){
 					ExprElement*expr=new ExprElement;
 					expr->type=OP_DIV;expr->data=NULL;
 					t->push_back(*expr);delete expr;
-					scaner=popchar(s); 
+					scaner=popchar(s);
 					continue;
 				}
 				if(numberjudge(scaner)){
@@ -247,8 +251,8 @@ Expression*getexpr(string*s){
 						if(judge16(s[0][3])&&judge16(s[0][4])&&judge16(s[0][5]))
 							flag2=1;
 				 	for(int i=0;i<=flag2;i++)rgbread(s,color->r,flag2);
-				 	for(int i=0;i<=flag2;i++)rgbread(s,color->g,flag2);					 
-				 	for(int i=0;i<=flag2;i++)rgbread(s,color->b,flag2);	
+				 	for(int i=0;i<=flag2;i++)rgbread(s,color->g,flag2);
+				 	for(int i=0;i<=flag2;i++)rgbread(s,color->b,flag2);
 					expr->data=reinterpret_cast<void*>(color);
 					t->push_back(*expr);delete expr;
 					scaner=popchar(s);
@@ -267,7 +271,7 @@ Expression*getexpr(string*s){
 					continue;
 				}
 			}
-	}	
+	}
 	return t;
 }
 bool checkcom(string*s,string*temp){
@@ -281,13 +285,13 @@ bool checkcom(string*s,string*temp){
 			*temp+="/*";s->erase(0,2);
 			while(!((s[0][0]=='*')&&(s[0][1]=='/'))){
 				*temp+=s[0][0];s->erase(0,1);
-			} 
+			}
 			*temp+="*/";s->erase(0,2);
 			return true;
 		}
 	}
 	return false;
-} 
+}
 string*read(string*s,char c){
 	string*temp=new string;*temp="";
 	if(c==';'){
@@ -297,13 +301,13 @@ string*read(string*s,char c){
 				*temp+='"';s->erase(0,1);
 				string*t=read(s,'"');
 				*temp+=*t;delete t;
-				*temp+='"';s->erase(0,1); 
+				*temp+='"';s->erase(0,1);
 			}
 			else if(s[0][0]=='\''){
 				*temp+='\'';s->erase(0,1);
 				string*t=read(s,'\'');
 				*temp+=*t;delete t;
-				*temp+='\'';s->erase(0,1); 
+				*temp+='\'';s->erase(0,1);
 			}
 			else{
 				*temp+=s[0][0];s->erase(0,1);
@@ -327,10 +331,10 @@ string*read(string*s,char c){
 		while(1){
 			if(checkcom(s,temp))continue;
 			if(s[0][0]=='\''){
-				if(temp->empty())break; 
+				if(temp->empty())break;
 				if(temp[0][temp->length()-1]!='\\')
 					break;
-				} 
+				}
 			*temp+=s[0][0];s->erase(0,1);
 		}
 		return temp;
@@ -343,22 +347,22 @@ string*read(string*s,char c){
 				*temp+='"';s->erase(0,1);
 				string*t=read(s,'"');
 				*temp+=*t;delete t;
-				*temp+='"';s->erase(0,1); 
+				*temp+='"';s->erase(0,1);
 				continue;
 			}
 			if(s[0][0]=='\''){
 				*temp+='\'';s->erase(0,1);
 				string*t=read(s,'\'');
 				*temp+=*t;delete t;
-				*temp+='\'';s->erase(0,1); 
+				*temp+='\'';s->erase(0,1);
 				continue;
-			}  
+			}
 			if(s[0][0]=='{')clock++;
 			if(s[0][0]=='}')clock--;
 			*temp+=s[0][0];s->erase(0,1);
 		}
 		return temp;
-	}	
+	}
 	if(c==')'){
 		int clock=0;
 		while((clock!=0)or(s[0][0]!=')')){
@@ -367,22 +371,22 @@ string*read(string*s,char c){
 				*temp+='"';s->erase(0,1);
 				string*t=read(s,'"');
 				*temp+=*t;delete t;
-				*temp+='"';s->erase(0,1); 
+				*temp+='"';s->erase(0,1);
 				continue;
 			}
 			if(s[0][0]=='\''){
 				*temp+='\'';s->erase(0,1);
 				string*t=read(s,'\'');
 				*temp+=*t;delete t;
-				*temp+='\'';s->erase(0,1); 
+				*temp+='\'';s->erase(0,1);
 				continue;
-			} 
+			}
 			if(s[0][0]=='(')clock++;
 			if(s[0][0]==')')clock--;
 			*temp+=s[0][0];s->erase(0,1);
 		}
 		return temp;
-	}	 
+	}
 }
 string*getname(string*s,const char c){
 	string*name=new string;*name="";
@@ -391,21 +395,21 @@ string*getname(string*s,const char c){
 	}
 	while((name[0][name->length()-1]=='\n')or(name[0][name->length()-1]==' '))name->erase(name->length()-1,1);
 	return name;
-} 
+}
 void mixinparam(vector<Expression>*params,string*s){
 	while(!s->empty()){
 		string*temps=new string;*temps="";
 		while((s[0][0]!=',')&&(s[0][0]!=';')&&(!s->empty())){
 			*temps+=popchar(s);
 			if(temps[0][temps->length()-1]=='"'){
-				string*t=read(s,'"');*temps+=*t;delete t;*temps+=popchar(s);			
+				string*t=read(s,'"');*temps+=*t;delete t;*temps+=popchar(s);
 			}
 			if(temps[0][temps->length()-1]=='\''){
-				string*t=read(s,'\'');*temps+=*t;delete t;*temps+=popchar(s);			
-			}			
+				string*t=read(s,'\'');*temps+=*t;delete t;*temps+=popchar(s);
+			}
 		}
 		Expression*expr=getexpr(temps);delete temps;
-		params->push_back(*expr);delete expr; 
+		params->push_back(*expr);delete expr;
 	}
 }
 LessParam*getparam(string*s){
@@ -424,20 +428,20 @@ LessParam*getparam(string*s){
 void lessparam(vector<struct LessParam>*params,string*s){
 	while(!s->empty()){
 		string*temps=new string;*temps="";
-		
+
 		while((s[0][0]!=',')&&(s[0][0]!=';')&&(!s->empty())){
 			*temps+=popchar(s);
 			if(temps[0][temps->length()-1]=='"'){
-				string*t=read(s,'"');*temps+=*t;delete t;*temps+=popchar(s);			
+				string*t=read(s,'"');*temps+=*t;delete t;*temps+=popchar(s);
 			}
 			if(temps[0][temps->length()-1]=='\''){
-				string*t=read(s,'\'');*temps+=*t;delete t;*temps+=popchar(s);			
-			}			
+				string*t=read(s,'\'');*temps+=*t;delete t;*temps+=popchar(s);
+			}
 		}
 		LessParam*param=getparam(temps);delete temps;
-		params->push_back(*param);delete param; 
-	}	
-} 
+		params->push_back(*param);delete param;
+	}
+}
 LessBlock*read(string*s){
 	LessBlock*p=new LessBlock;
 	while(!s->empty()){
@@ -450,7 +454,7 @@ LessBlock*read(string*s){
 				t->type=BLOCK_COMMENT;
 				t->data=reinterpret_cast<void*>(ts);
 				p->push_back(*t);delete t;
-				continue; 
+				continue;
 			}
 		}
 		delete ts;
@@ -465,7 +469,7 @@ LessBlock*read(string*s){
 				}
 				if(s[0][i-1]!='@'){
 					x=i;y=2;break;
-				} 	
+				}
 			}
 			if(s[0][i]==':'){
 				x=i;y=3;break;
@@ -477,17 +481,17 @@ LessBlock*read(string*s){
 				string*name=getname(s,'(');s->erase(0,1);
 				string*param=read(s,')');s->erase(0,1);
 				while((s[0][0]==' ')or(s[0][0]=='\n'))s->erase(0,1);
-				if(s[0][0]=='{'){			
+				if(s[0][0]=='{'){
 					s->erase(0,1);
 					string*temps=read(s,'}');s->erase(0,1);*temps+=';';
 					LessBlock*tempb=read(temps);delete temps;
 					LessSelector*temp=new LessSelector;
-					temp->selector_body=*tempb;delete tempb;	
+					temp->selector_body=*tempb;delete tempb;
 					vector<struct LessParam>*params=new vector<struct LessParam>;
-					lessparam(params,param);delete param;	
+					lessparam(params,param);delete param;
 					temp->name=*name;temp->params=*params;
 					delete name;delete param;
-					t->type=PARAMETRIC_SELECTOR;				
+					t->type=PARAMETRIC_SELECTOR;
 					t->data=reinterpret_cast<void*>(temp);
 					p->push_back(*t);delete t;
 				}
@@ -495,7 +499,7 @@ LessBlock*read(string*s){
 					t->type=MIXIN;
 					LessMixin*temp=new LessMixin;
 					vector<Expression>*params=new vector<Expression>;
-					mixinparam(params,param);delete param;	
+					mixinparam(params,param);delete param;
 					temp->name=*name;temp->params=*params;
 					delete name;delete param;
 					t->data=reinterpret_cast<void*>(temp);
@@ -507,7 +511,7 @@ LessBlock*read(string*s){
 				t->type=NORMAL_SELECTOR;
 				LessSelector*temp=new LessSelector;
 				string*name=getname(s,'{');s->erase(0,1);
-				temp->name=*name;delete name;			
+				temp->name=*name;delete name;
 				temp->params.clear();
 				string*temps=read(s,'}');s->erase(0,1);*temps+=';';
 				LessBlock*tempb=read(temps);delete temps;
@@ -524,10 +528,10 @@ LessBlock*read(string*s){
 				string*temps=read(s,';');s->erase(0,1);
 				LessElement*t=new LessElement;
 				if(flag){
-					LessDef*temp=new LessDef; 
+					LessDef*temp=new LessDef;
 					temp->name=*name;
 					Expression*tt=getexpr(temps);
-					temp->expression=*tt;delete tt; 
+					temp->expression=*tt;delete tt;
 					t->data=reinterpret_cast<void*>(temp);
 					t->type=DEF;
 				}
@@ -541,14 +545,16 @@ LessBlock*read(string*s){
 				}
 				delete name;delete temps;
 				p->push_back(*t);delete t;
-			}	
+			}
 		}
 	}
-	return p;	
+	return p;
 }
 int main(){
 	LessBlock*p=new LessBlock;string s="";char c;
-	while(c=getc(stdin))s+=c;s+=';';
+    FILE *fp=fopen("less_sample","r");
+    while((c=fgetc(fp))!=EOF)s+=c;
+    s+=';';
 	p=read(&s);
 	return 0;
-} 
+}

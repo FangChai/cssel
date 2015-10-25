@@ -15,6 +15,7 @@ void build_parametricselector_token(PSelector paraselector,TokenMap &tokenmap);
 void build_normalselector_token(PSelector  nselector,TokenMap &tokenmap);
 void *find_double_call_element(string elem_name,LessElementType elem_type);
 void less_expand(LessBlock& currenBlock);
+extern void print_block(LessBlock &less_block);
 
 LessBlock expand_mixin(PMixin mixin);
 //TODO
@@ -56,6 +57,7 @@ int main(int argc,char** argv)
     testful_block.push_back(*selector1_elem);
     testful_block.push_back(*selector2_elem);
     less_expand(testful_block);
+    print_block(testful_block);
     return 0;
 }
 

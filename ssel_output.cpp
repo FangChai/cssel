@@ -65,6 +65,7 @@ void write_css_file(ofstream &output_stream,const LessBlock& toWrite,bool firstI
                 break;
             case LessElementType::CSS_RULE:
                 {
+                    if(G_from_chain.empty()){
                     auto p_css_rule=(LessCssRule *)elem.data;
                     auto css_name = p_css_rule->name+" : ";
                     *++o_iter=css_name;
@@ -94,6 +95,7 @@ void write_css_file(ofstream &output_stream,const LessBlock& toWrite,bool firstI
                             default:
                                 //What the hell?
                                 break;
+                    }
                     }
                 break;
                 }
