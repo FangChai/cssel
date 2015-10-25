@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "include/ssel_commons.h"
+#include "include/ssel_operators.h"
 
 using namespace std;
 

@@ -116,7 +116,7 @@ void print_expression(Expression &expr)
                 switch(iter->type) {
                 case CONSTANT:
                         pconst = (LessConstant *)iter->data;
-                        cout<<"constant:"<<pconst->val<<pconst->unit<<endl;
+                        cout<<"constant:"<<pconst->val<<pconst->unit<<'\n'<<endl;
                         break;
                 case STRING:
                         cout<<"string:"<<*((string*)iter->data)<<"\n"<<endl;
@@ -124,9 +124,10 @@ void print_expression(Expression &expr)
                 case COLOR:
                         cout<<"color:";
                         cout<<"r:"<<((LessColor *)iter->data)->r;
-                        cout<<"g:"<<((LessColor *)iter->data)->r;
-                        cout<<"b:"<<((LessColor *)iter->data)->r;
+                        cout<<"g:"<<((LessColor *)iter->data)->g;
+                        cout<<"b:"<<((LessColor *)iter->data)->b;
                         cout<<"\n"<<endl;
+                        break;
                 case LEFT_BRACE:
                         cout<<"left brace\n"<<endl;
                         break;
